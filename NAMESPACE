@@ -1,0 +1,4 @@
+import(Rcpp)
+importFrom("methods", "new")
+useDynLib(Rquefts, .registration = TRUE)
+exportPattern("^[[:alpha:]]+")
