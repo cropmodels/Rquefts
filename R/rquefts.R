@@ -111,7 +111,7 @@ quefts_crop <- function(name='') {
 	}	
 	return(d)
 }
-
+				
 
 setMethod ('show' , 'Rcpp_QueftsModel', 
 	function(object) {
@@ -121,15 +121,79 @@ setMethod ('show' , 'Rcpp_QueftsModel',
 
 
 quefts <- function(soil, crop, fert, biom) {
-	if (missing(soil)) { crop <- quefts_soil() }
+	if (missing(soil)) { soil <- quefts_soil() }
 	if (missing(crop)) { crop <- quefts_crop() }
 	if (missing(fert)) { fert <- quefts_fert() }
 	if (missing(biom)) { biom <- quefts_biom() }	
-	q <- QueftsModel$new()
-	crop(q) <- crop
-	soil(q) <- soil
-	fert(q) <- fert
-	biom(q) <- biom
-	q
+	x <- QueftsModel$new()
+	crop(x) <- crop
+	soil(x) <- soil
+	fert(x) <- fert
+	biom(x) <- biom
+	x
 }
+
+
+run <- function(x) {
+	x$run()
+}
+
+
+setMethod("[", c("Rcpp_QueftsModel", "character", "missing"),
+function(x, i, j, ... ,drop=TRUE) {
+	eval(parse(text = paste0("x$", i)))
+})
+
+setMethod("[", c("Rcpp_QueftsModel", "character", "character"),
+function(x, i, j, ... ,drop=TRUE) {
+	if (i=='model') {
+		eval(parse(text = paste0("x$", j)))
+	} else {
+		eval(parse(text = paste0("x$", i, '$', j)))
+	}
+})
+
+setMethod("[", c("Rcpp_QueftsSoil", "character", "missing"),
+function(x, i, j, ... ,drop=TRUE) {
+	eval(parse(text = paste0("x$", i)))
+})
+
+
+setMethod("[", c("Rcpp_QueftsCrop", "character", "missing"),
+function(x, i, j, ... ,drop=TRUE) {
+	eval(parse(text = paste0("x$", i)))
+})
+
+
+setReplaceMethod("[", c("Rcpp_QueftsModel", "character", "missing"),
+	function(x, i, j, value) {
+		eval(parse(text = paste0("x$", i, " <- ", value)))
+		return(x)
+	}
+)
+
+setReplaceMethod("[", c("Rcpp_QueftsCrop", "character", "missing"),
+	function(x, i, j, value) {
+		eval(parse(text = paste0("x$crop", i, " <- ", value)))
+		return(x)
+	}
+)
+
+setReplaceMethod("[", c("Rcpp_QueftsSoil", "character", "missing"),
+	function(x, i, j, value) {
+		eval(parse(text = paste0("x$soil", i, " <- ", value)))
+		return(x)
+	}
+)
+
+setReplaceMethod("[", c("Rcpp_QueftsModel", "character", "character"),
+	function(x, i, j, value) {
+		if (i=='model') {	
+			eval(parse(text = paste0("x$", j, " <- ", value)))
+		} else {
+			eval(parse(text = paste0("x$", i, "$", j, " <- ", value)))
+		}
+		return(x)
+	}
+)
 

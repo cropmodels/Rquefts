@@ -38,10 +38,10 @@ struct QueftsModel {
 
 	// Crop biomass (water-limited production, by organ; dry-matter, kg/ha)
 	double leaf_att, stem_att, store_att;
-	double SeasonLength=120; // days
-	
+	double SeasonLength=120; // days	
 	// fertilizer supplied
 	double N_fertilizer=0, P_fertilizer=0, K_fertilizer=0;
+
 	
 // OUTPUT
 	// nutrient supply from soil and fertilzer
@@ -53,11 +53,10 @@ struct QueftsModel {
 	// fertilizer required to reach attainable yield
 	double N_gap, P_gap, K_gap;
 	
-	
 // MODEL 
 	void run();
 	std::vector<double> output() {
-		return std::vector<double> {N_gap, P_gap, K_gap, N_supply, P_supply, K_supply, N_fertilizer, P_fertilizer, K_fertilizer};
+		return std::vector<double> {N_gap, P_gap, K_gap, N_supply, P_supply, K_supply, leaf_lim, stem_lim, store_lim};
 	}
 		
 };

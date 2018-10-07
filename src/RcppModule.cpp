@@ -7,15 +7,15 @@ using namespace Rcpp;
 NumericVector runout(QueftsModel* q) {
 	q->run();
 	NumericVector out = NumericVector::create(
+		_["leaf_lim"] = q->leaf_lim,
+		_["stem_lim"] = q->stem_lim,
+		_["store_lim"] = q->store_lim,
 		_["N_supply"] = q->N_supply,
 		_["P_supply"] = q->P_supply,
 		_["K_supply"] = q->K_supply,
 		_["N_uptake"] = q->UN,
 		_["P_uptake"] = q->UP,
 		_["K_uptake"] = q->UK,
-		_["leaf_lim"] = q->leaf_lim,
-		_["stem_lim"] = q->stem_lim,
-		_["store_lim"] = q->store_lim,
 		_["N_gap"] = q->N_gap,
 		_["P_gap"] = q->P_gap,
 		_["K_gap"] = q->K_gap
@@ -80,7 +80,7 @@ RCPP_MODULE(QUEFTS){
 		.field("K", &QueftsModel::K_fertilizer, "K_fertilizer")
 		
 		// output
-		.field("N_supply", &QueftsModel::N_supply, "N_supply")
+/*		.field("N_supply", &QueftsModel::N_supply, "N_supply")
 		.field("P_supply", &QueftsModel::P_supply, "P_supply")
 		.field("K_supply", &QueftsModel::K_supply, "K_supply")
 
@@ -92,5 +92,6 @@ RCPP_MODULE(QUEFTS){
 		.field("N_gap", &QueftsModel::N_gap, "N_gap")
 		.field("P_gap", &QueftsModel::P_gap, "P_gap")
 		.field("K_gap", &QueftsModel::K_gap, "K_gap")
+*/		
 	;			
 }

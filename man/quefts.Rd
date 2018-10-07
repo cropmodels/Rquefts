@@ -2,6 +2,7 @@
 
 
 \alias{quefts}
+\alias{run}
 \alias{quefts_crop}
 \alias{quefts_soil}
 \alias{quefts_fert}
@@ -11,6 +12,16 @@
 \alias{fert<-}
 \alias{biom<-}
 
+\alias{[,Rcpp_QueftsModel,character,missing-method}
+\alias{[,Rcpp_QueftsModel,character,character-method}
+\alias{[,Rcpp_QueftsCrop,character,missing-method}
+\alias{[,Rcpp_QueftsSoil,character,missing-method}
+
+\alias{[<-,Rcpp_QueftsModel,character,missing-method}
+\alias{[<-,Rcpp_QueftsModel,character,character-method}
+\alias{[<-,Rcpp_QueftsCrop,character,missing-method}
+\alias{[<-,Rcpp_QueftsSoil,character,missing-method}
+
 
 \title{
 QUEFTS model
@@ -19,7 +30,9 @@ QUEFTS model
 \description{
 Create a QUEFTS model, set parameters, and run it to compute nutrient requirements and nutrient limited yield.
 
-A number of default crop parameter sets are provided, as well as one example soil. You need to provide attainable (that is, yield without nutrient limitation), or target dry-matter biomass for leaves, stems and the storage organ (e.g. grain, root or tuber). Some crops are grown for the stems/leaves, in which case there is no relevant storage organ (e.g. sugarcane, jute). Attanable yield estimates can be obtained with a crop growht model. 
+A number of default crop parameter sets are provided, as well as one example soil. You need to provide attainable crop production (in this context that is the maximum production in the absence of nutrient limitation), or target dry-matter biomass for leaves, stems and the storage organ (e.g. grain, root or tuber). Some crops are grown for the stems/leaves, in which case there is no relevant storage organ (e.g. sugarcane, jute). production yield estimates can be obtained with a crop growth model. 
+
+For a cereal crop you can assume that 50% of the total biomass is grain, and about 25% is stem and 25% is leave biomass.
 }
 
 \usage{
@@ -32,6 +45,7 @@ crop(x) <- value
 soil(x) <- value
 fert(x) <- value
 biom(x) <- value
+run(x)
 }
 
 \arguments{
@@ -98,13 +112,13 @@ library(Rquefts)
 soiltype <- quefts_soil()
 barley <- quefts_crop('Barley')
 fertilizer <- list(N=0, P=0, K=0)
-yld <- list(leaf_att=2200, stem_att=2700, store_att=4800, SeasonLength=110)
+att_yield <- list(leaf_att=2200, stem_att=2700, store_att=4800, SeasonLength=110)
 
-# create model
-q <- quefts(soiltype, barley, fertilizer, yld)
+# 2 create a model
+q <- quefts(soiltype, barley, fertilizer, att_yield)
 
 # run the model
-q$run()
+run(q)
 
 # change some parameters
 q$SeasonLength <- 162
@@ -116,17 +130,17 @@ q$N <- 100
 q$P <- 50
 q$K <- 50
 
-q$run()
+run(q)
 
 
 fert(q) <- list(N=0, P=0, K=0)
 N <- 1:20*10
 
 results <- matrix(nrow=length(N), ncol=12)
-colnames(results) <- names(q$run())
+colnames(results) <- names(run(q))
 for (i in 1:length(N)) {
-	q$N <- N[i]
-	results[i,] <- q$run()
+	q['N'] <- N[i]
+	results[i,] <- run(q)
 }
 
 yield <- results[,'store_lim']
@@ -142,12 +156,12 @@ for (i in 1:nrow(f)) {0
 	q$N <- f$N[i] 
 	q$P <- f$P[i] 
 	q$K <- f$K[i] 
-	x[i] <- q$run()['store_lim']
+	x[i] <- run(q)['store_lim']
 }
 x <- cbind(f, x)
 
 \dontrun{
-
+# display results
 library(raster  )
 r0 <- rasterFromXYZ(x[x$K==0, -3])
 r200 <- rasterFromXYZ(x[x$K==200, -3])
@@ -157,6 +171,33 @@ plot(r0, xlab='N fertilizer', ylab='P fertilizer', las=1, main="K=0")
 contour(r0, add=TRUE)
 plot(r200, xlab='N fertilizer', ylab='P fertilizer', las=1, main="K=200")
 contour(r200, add=TRUE)
-plot(stack(r0, r200))
+#plot(stack(r0, r200))
 }
+
+### note that Rquefts uses C++ reference classes. This means that if you copy a quefts model, you do not create a new instance of the model, but you point to the same one!
+q <- quefts()
+q['N']
+k <- q
+k['N'] <- 150
+k['N']
+# the value of q has also changed!
+q['N']
+
+## different ways of subsetting / replacement
+q <- quefts()
+q$N
+q$N <- 30
+q['N']
+q['N'] <- 90
+q['model', 'N']
+q['model', 'N'] <- 60
+q$N
+
+q$soil$N_recovery
+q['soil$N_recovery']
+q['soil$N_recovery'] <- .6
+q['soil', 'N_recovery']
+q['soil', 'N_recovery'] <- .4
+q$soil$N_recovery
+
 }
