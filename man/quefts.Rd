@@ -55,7 +55,7 @@ run(x)
  \item{biom}{list with named biomass and growing season length parameters. An example is returned by \code{quefts_biom()}} 
  \item{name}{character. crop name} 
  \item{x}{QueftsModel object}
- \item{value}{a list with soil, crop, fertlizer, or yield parameters as above}
+ \item{value}{a list with soil, crop, fertilizer, or biomass parameters as above}
 }
 
 
@@ -65,27 +65,27 @@ run(x)
 \tabular{lll}{
 	\tab \bold{Input Parameters} \tab \bold{Explanation} \cr
 	\tab \bold{Soil} \tab . \cr
-	\tab \code{N_base_supply, P_base_supply, K_base_supply} \tab Potential supply (kg/ha) of N, P and K of the (unfertilzed) soil in a growing season of standard length (default is 120 days). See \code{\link{soilNutrientSupply}} to estimate that. \cr
-	\tab \code{N_recovery, P_recovery, K_recovery} \tab Fertilzer recovey, that is, the fraction of applied fertilizer that can be taken up by the plant. \cr
-	\tab \code{UptakeAdjust} \tab Two-colum matrix to compute the fraction uptake from soil supply as function of length of season. The default standard season length is 120 days. The first column is the length of the growing season, the second column is the fraction uptake. Intermediate values are computed by linear interpolation. \cr
+	\tab \code{N_base_supply, P_base_supply, K_base_supply} \tab Potential supply (kg/ha) of N, P and K of the (unfertilized) soil in a growing season of standard length (default is 120 days). See \code{\link{soilNutrientSupply}} to estimate that. \cr
+	\tab \code{N_recovery, P_recovery, K_recovery} \tab Fertilizer recovery, that is, the fraction of applied fertilizer that can be taken up by the plant. \cr
+	\tab \code{UptakeAdjust} \tab Two-column matrix to compute the fraction uptake from soil supply as function of length of season. The default standard season length is 120 days. The first column is the length of the growing season, the second column is the fraction uptake. Intermediate values are computed by linear interpolation. \cr
 	
 	\tab \bold{Crop} \tab . \cr
 	\tab \code{_minVeg, _maxVeg, _minStore, _maxStore} \tab minimum and maximum concentration of "\code{_}" (N, P, or K) in vegetative organs and in storage organs (kg/kg) \cr
 	\tab \code{Yzero} \tab the maximum biomass of vegetative organs at zero yield of storage organs (kg/ha) \cr
 	\tab \code{Nfix} \tab the fraction of a crop's nitrogen uptake supplied by biological fixation \cr
 
-	\tab \bold{Managment} \tab . \cr
-	\tab \code{N, P, K} \tab N, P, and K fertilzer applied. \cr
+	\tab \bold{Management} \tab . \cr
+	\tab \code{N, P, K} \tab N, P, and K fertilizer applied. \cr
 
 	\tab \bold{Crop yield} \tab . \cr
-	\tab \code{leaf_att, stem_att, store_att} \tab Attainable (in the absence of nutirent limitation), or target crop biomass (dry-matter, kg/ha) for leaves, stems and storage organs.\cr
+	\tab \code{leaf_att, stem_att, store_att} \tab Attainable (in the absence of nutrient limitation), or target crop biomass (dry-matter, kg/ha) for leaves, stems and storage organs.\cr
 	\tab \code{SeasonLength} \tab Length of the growing season (days)\cr
 
 	
 	\tab . \tab \cr
 	\tab . \tab \cr
 	\tab \bold{Output Variables} \tab \bold{Explanation} \cr
-	\tab \code{N_actual_supply, P_actual_supply, K_actual_supply} \tab nutrient uptake from soil (not fertilzer) (kg/ha) \cr
+	\tab \code{N_actual_supply, P_actual_supply, K_actual_supply} \tab nutrient uptake from soil (not fertilizer) (kg/ha) \cr
 	\tab \code{leaf_lim, stem_lim, store_lim} \tab nutrient limited biomass of leaves, stems, and storage organ (kg/ha) \cr
 	\tab \code{N_gap, P_gap, K_gap} \tab fertilizer required to reach the specified biomass (kg/ha) \cr
 }

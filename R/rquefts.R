@@ -141,33 +141,34 @@ run <- function(x) {
 
 setMethod("[", c("Rcpp_QueftsModel", "character", "missing"),
 function(x, i, j, ... ,drop=TRUE) {
-	eval(parse(text = paste0("x$", i)))
+	sapply(i, function(y) eval(parse(text = paste0("x$", y))))
 })
 
 setMethod("[", c("Rcpp_QueftsModel", "character", "character"),
 function(x, i, j, ... ,drop=TRUE) {
 	if (i=='model') {
-		eval(parse(text = paste0("x$", j)))
+		sapply(j, function(y) eval(parse(text = paste0("x$", y))))
 	} else {
-		eval(parse(text = paste0("x$", i, '$', j)))
+		j <- paste0(i, '$', j)
+		sapply(j, function(y) eval(parse(text = paste0("x$", y))))
 	}
 })
 
 setMethod("[", c("Rcpp_QueftsSoil", "character", "missing"),
 function(x, i, j, ... ,drop=TRUE) {
-	eval(parse(text = paste0("x$", i)))
+	sapply(i, function(y) eval(parse(text = paste0("x$", y))))
 })
 
 
 setMethod("[", c("Rcpp_QueftsCrop", "character", "missing"),
 function(x, i, j, ... ,drop=TRUE) {
-	eval(parse(text = paste0("x$", i)))
+	sapply(i, function(y) eval(parse(text = paste0("x$", y))))
 })
 
 
 setReplaceMethod("[", c("Rcpp_QueftsModel", "character", "missing"),
 	function(x, i, j, value) {
-		eval(parse(text = paste0("x$", i, " <- ", value)))
+		sapply(i, function(y) eval(parse(text =  paste0("x$", y, " <- ", value))))
 		return(x)
 	}
 )

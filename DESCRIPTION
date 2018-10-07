@@ -1,12 +1,16 @@
 Package: Rquefts
 Type: Package
 Title: Quantitative Evaluation of the Native Fertility of Tropical Soils
-Version: 0.2-2
-Date: 2017-12-11
+Version: 1.0-0
+Date: 2018-10-07
 LinkingTo: Rcpp, meteor
 SystemRequirements: C++11
 Imports: methods, Rcpp (>= 0.12.4)
-Author: Robert Hijmans
+Authors@R: c(
+	person("Robert J.", "Hijmans", role = c("cre", "aut"),  email = "r.hijmans@gmail.com"),
+	person("Joost", "Wolff", role = "ctb"))
 Maintainer: Robert Hijmans <r.hijmans@gmail.com>
 Description: This package implements the QUEFTS model to estimate nutrient requirements for crops to achieve a target yield given native soil fertility. 
 License: GPL (>=3)
+Suggests: knitr, rmarkdown
+VignetteBuilder: knitr

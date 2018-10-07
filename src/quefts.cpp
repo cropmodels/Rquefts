@@ -1,22 +1,11 @@
-/* Calculate nutrient requirements and nutrient limited yields according to the QUEFTS-system 
+/* Calculate nutrient requirements and nutrient limited yields according to the QUEFTS model 
 
 Author: Robert Hijmans
 Date: April 2016
 License: GNU General Public License (GNU GPL) v. 2
 
-This C++ implementation is based on NUTRIE.FOR (part of WOFOST) 
-Author: Joost Wolf, January 1987, and revised by Kees van Diepen, August 1992
+This C++ implementation is based on NUTRIE.FOR (part of WOFOST) by Joost Wolf, January 1987
 Copyright 1988, 2013 Alterra, Wageningen-UR and Licensed under the EUPL, Version 1.1
-
-See Chapter 3 in documentation WOFOST Version 4.1 (1988)
-
-For QUEFTS see
-
-Janssen et al., 1990. A system for the quantitative evaluation of tropical soils. Geoderma 46: 299-318
-
-Janssen and Wolf, 1988
-
-Sattari et al., 2014. Crop yield response to soil fertility and N, P, K inputs in different environments: Testing and improving the QUEFTS model. Field Crops Research 157:35-46
 
 INPUT
 Name    		Description                             Units 
