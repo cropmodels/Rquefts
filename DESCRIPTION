@@ -13,4 +13,4 @@ Maintainer: Robert Hijmans <r.hijmans@gmail.com>
 Description: This package implements the QUEFTS model to estimate nutrient requirements for crops to achieve a target yield given native soil fertility. 
 License: GPL (>=3)
 Suggests: knitr, rmarkdown
-VignetteBuilder: knitr
+VignetteBuilder: knitr::rmarkdown
