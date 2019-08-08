@@ -2,7 +2,7 @@
 
 Author: Robert Hijmans
 Date: April 2016
-License: GNU General Public License (GNU GPL) v. 2
+License: GPL (>=3)
 
 This C++ implementation is based on NUTRIE.FOR (part of WOFOST) by Joost Wolf, January 1987
 Copyright 1988, 2013 Alterra, Wageningen-UR and Licensed under the EUPL, Version 1.1
@@ -225,5 +225,24 @@ void QueftsModel::run() {
 	
 }
 
+
+
+std::vector<double> QueftsModel::runbatch(std::vector<double> Ns, std::vector<double> Ps, std::vector<double> Ks, std::vector<double> Ya) {
+	
+	size_t n = Ns.size();
+	std::vector<double> out(n, NAN); 
+	for (size_t i=0; i<n; i++) {
+		if (isnan(Ns[i])) continue;	
+		soil.N_base_supply = Ns[i];
+		soil.P_base_supply = Ps[i];
+		soil.K_base_supply = Ks[i];
+		store_att = Ya[i];
+		leaf_att = 0.25 * store_att;
+		stem_att = leaf_att;
+		run();
+		out[i] = store_lim;
+	}
+	return out;
+}	
 
 

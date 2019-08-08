@@ -3,6 +3,8 @@
 
 \alias{quefts}
 \alias{run}
+\alias{run,Rcpp_QueftsModel-method}
+
 \alias{quefts_crop}
 \alias{quefts_soil}
 \alias{quefts_fert}
@@ -11,6 +13,12 @@
 \alias{crop<-}
 \alias{fert<-}
 \alias{biom<-}
+
+\alias{soil<-,Rcpp_QueftsModel,list-method}
+\alias{crop<-,Rcpp_QueftsModel,list-method}
+\alias{fert<-,Rcpp_QueftsModel,list-method}
+\alias{biom<-,Rcpp_QueftsModel,list-method}
+
 
 \alias{[,Rcpp_QueftsModel,character,missing-method}
 \alias{[,Rcpp_QueftsModel,character,character-method}
@@ -45,7 +53,7 @@ crop(x) <- value
 soil(x) <- value
 fert(x) <- value
 biom(x) <- value
-run(x)
+run(x, ...)
 }
 
 \arguments{
@@ -55,17 +63,17 @@ run(x)
  \item{biom}{list with named biomass and growing season length parameters. An example is returned by \code{quefts_biom()}} 
  \item{name}{character. crop name} 
  \item{x}{QueftsModel object}
- \item{value}{a list with soil, crop, fertilizer, or biomass parameters as above}
+ \item{value}{list with soil, crop, fertilizer, or biomass parameters as above}
+ \item{...}{additional arguments. None implemented}
 }
 
 
 \details{
 
-
 \tabular{lll}{
 	\tab \bold{Input Parameters} \tab \bold{Explanation} \cr
 	\tab \bold{Soil} \tab . \cr
-	\tab \code{N_base_supply, P_base_supply, K_base_supply} \tab Potential supply (kg/ha) of N, P and K of the (unfertilized) soil in a growing season of standard length (default is 120 days). See \code{\link{soilNutrientSupply}} to estimate that. \cr
+	\tab \code{N_base_supply, P_base_supply, K_base_supply} \tab Potential supply (kg/ha) of N, P and K of the (unfertilized) soil in a growing season of standard length (default is 120 days). See \code{\link{nutSupply}} to estimate that. \cr
 	\tab \code{N_recovery, P_recovery, K_recovery} \tab Fertilizer recovery, that is, the fraction of applied fertilizer that can be taken up by the plant. \cr
 	\tab \code{UptakeAdjust} \tab Two-column matrix to compute the fraction uptake from soil supply as function of length of season. The default standard season length is 120 days. The first column is the length of the growing season, the second column is the fraction uptake. Intermediate values are computed by linear interpolation. \cr
 	
@@ -97,9 +105,9 @@ vector with output variables as described in the Details
 }
 
 \references{
-Janssen et al., 1990. A system for the quantitative evaluation of tropical soils. Geoderma 46: 299-318
+Janssen, Guiking, Van der Eijk, Smaling, Wolf and Van Reuler, 1990. A system for the quantitative evaluation of tropical soils. Geoderma 46: 299-318
 
-Sattari et al., 2014. Crop yield response to soil fertility and N, P, K inputs in different environments: Testing and improving the QUEFTS model. Field Crops Research 157:35-46
+Sattari, Van Ittersum, Bouwman, Smit, and Janssen, 2014. Crop yield response to soil fertility and N, P, K inputs in different environments: Testing and improving the QUEFTS model. Field Crops Research 157:35-46
 }
 
 
@@ -110,7 +118,7 @@ library(Rquefts)
 # create a QUEFTS model
 # 1 get parameters
 soiltype <- quefts_soil()
-barley <- quefts_crop('Barley')
+barley <- quefts_crop("Barley")
 fertilizer <- list(N=0, P=0, K=0)
 att_yield <- list(leaf_att=2200, stem_att=2700, store_att=4800, SeasonLength=110)
 
@@ -139,16 +147,16 @@ N <- 1:20*10
 results <- matrix(nrow=length(N), ncol=12)
 colnames(results) <- names(run(q))
 for (i in 1:length(N)) {
-	q['N'] <- N[i]
+	q["N"] <- N[i]
 	results[i,] <- run(q)
 }
 
-yield <- results[,'store_lim']
+yield <- results[,"store_lim"]
 
 par(mfrow=c(1,2))
-plot(N, yield, type='l', lwd=2)
+plot(N, yield, type="l", lwd=2)
 Efficiency = yield / N
-plot(N, Efficiency, type='l', lwd=2)
+plot(N, Efficiency, type="l", lwd=2)
 
 f <- expand.grid(N=seq(0,400,10), P=seq(0,400,10), K=c(0,200))
 x <- rep(NA, nrow(f))
@@ -156,7 +164,7 @@ for (i in 1:nrow(f)) {0
 	q$N <- f$N[i] 
 	q$P <- f$P[i] 
 	q$K <- f$K[i] 
-	x[i] <- run(q)['store_lim']
+	x[i] <- run(q)["store_lim"]
 }
 x <- cbind(f, x)
 
@@ -167,37 +175,39 @@ r0 <- rasterFromXYZ(x[x$K==0, -3])
 r200 <- rasterFromXYZ(x[x$K==200, -3])
 
 par(mfrow=c(1,2))
-plot(r0, xlab='N fertilizer', ylab='P fertilizer', las=1, main="K=0")
+plot(r0, xlab="N fertilizer", ylab="P fertilizer", las=1, main="K=0")
 contour(r0, add=TRUE)
-plot(r200, xlab='N fertilizer', ylab='P fertilizer', las=1, main="K=200")
+plot(r200, xlab="N fertilizer", ylab="P fertilizer", las=1, main="K=200")
 contour(r200, add=TRUE)
 #plot(stack(r0, r200))
 }
 
-### note that Rquefts uses C++ reference classes. This means that if you copy a quefts model, you do not create a new instance of the model, but you point to the same one!
+## note that Rquefts uses C++ reference classes. 
+## This means that if you copy a quefts model, you do not create a 
+## new instance of the model, but you point to the same one!
 q <- quefts()
-q['N']
+q["N"]
 k <- q
-k['N'] <- 150
-k['N']
+k["N"] <- 150
+k["N"]
 # the value of q has also changed!
-q['N']
+q["N"]
 
 ## different ways of subsetting / replacement
 q <- quefts()
 q$N
 q$N <- 30
-q['N']
-q['N'] <- 90
-q['model', 'N']
-q['model', 'N'] <- 60
+q["N"]
+q["N"] <- 90
+q["model", "N"]
+q["model", "N"] <- 60
 q$N
 
 q$soil$N_recovery
-q['soil$N_recovery']
-q['soil$N_recovery'] <- .6
-q['soil', 'N_recovery']
-q['soil', 'N_recovery'] <- .4
+q["soil$N_recovery"]
+q["soil$N_recovery"] <- .6
+q["soil", "N_recovery"]
+q["soil", "N_recovery"] <- .4
 q$soil$N_recovery
 
 }

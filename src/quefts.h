@@ -1,7 +1,7 @@
 /*
 Author: Robert Hijmans
 Date: April 2016
-License: GNU General Public License (GNU GPL) v. 2
+License: GPL (>=3)
 */
 
 
@@ -58,6 +58,8 @@ struct QueftsModel {
 	std::vector<double> output() {
 		return std::vector<double> {N_gap, P_gap, K_gap, N_supply, P_supply, K_supply, leaf_lim, stem_lim, store_lim};
 	}
+
+	std::vector<double> runbatch(std::vector<double> Ns, std::vector<double> Ps, std::vector<double> Ks, std::vector<double> Ya);
 		
 };
 

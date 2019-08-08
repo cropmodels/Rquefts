@@ -1,76 +1,54 @@
-#Rcpp::compileAttributes('/home/rhijmans/bitbucket/models/quefts/Rquefts')
 
+setMethod("soil<-", signature("Rcpp_QueftsModel", "list"), 
+	function(x, value) {
+		parameters <- c("K_base_supply", "K_recovery", "N_base_supply", "N_recovery", "P_base_supply", "P_recovery", "UptakeAdjust")
+		nms <- names(value)
+		if (!all(parameters %in% nms)) stop(paste("parameters missing:", paste(parameters[!(parameters %in% nms)], collapse=", ")))
 
-"soil<-" <- function(x, value) {
-	parameters <- c("K_base_supply", "K_recovery", "N_base_supply", "N_recovery", "P_base_supply", "P_recovery", "UptakeAdjust")
-	nms <- names(value)
-	if (!all(parameters %in% nms)) stop(paste("parameters missing:", paste(parameters[!(parameters %in% nms)], collapse=", ")))
-
-	value <- value[parameters]
-	nms <- names(value)
-	
-	lapply(1:length(value), function(i) eval(parse(text = paste0("x$soil$", nms[i], " <- ", value[i]))))
-	return(x)
-}
-
-"crop<-" <- function(x, value) {
-	parameters <- c("KmaxStore", "KmaxVeg", "KminStore", "KminVeg", "Nfix", "NmaxStore", "NmaxVeg", "NminStore", "NminVeg", "PmaxStore", "PmaxVeg", "PminStore", "PminVeg", "Yzero")
-	nms <- names(value)
-	
-	if (!all(parameters %in% nms)) stop(paste("parameters missing:", paste(parameters[!(parameters %in% nms)], collapse=", ")))
-	value <- value[parameters]
-	nms <- names(value)
-	lapply(1:length(value), function(i) eval(parse(text = paste0("x$crop$", nms[i], " <- ", value[i]))))
-	return(x)
-}
-
-
-"fert<-" <- function(x, value) {
-	parameters <- c("N", "P", "K")
-	value <- value[parameters]
-	nms <- names(value)
-	lapply(1:length(value), function(i) eval(parse(text = paste0("x$", nms[i], " <- ", value[i]))))
-	return(x)
-}
-
-"biom<-" <- function(x, value) {
-	parameters <- c("leaf_att", "stem_att", "store_att", "SeasonLength")
-	nms <- names(value)
-	if (!all(parameters %in% nms)) stop(paste("parameters missing:", paste(parameters[!(parameters %in% nms)], collapse=", ")))
-	value <- value[parameters]
-	nms <- names(value)
-	lapply(1:length(value), function(i) eval(parse(text = paste0("x$", nms[i], " <- ", value[i]))))
-	return(x)
-}
-
-
-soilNutrientSupply <- function(pH, SOC, Kex, Polsen, Ptotal=NA) {
-	# SOC in g/kg, Kex in mmol/kg, P in mg/kg
-	# Janssen et al., 1990. Geoderma 46: 299-318, Table 2
-
-	# for recycling
-	d <- cbind(pH, SOC, Kex, Polsen, Ptotal)
-	pH <- d[,1]
-	SOC <- d[,2]
-	Kex <- d[,3]
-	Polsen <- d[,4]
-	Ptotal <- d[,5]
-
-	fN <- 0.25 * (pH - 3)
-	N_base_supply <- fN * 6.8 * SOC
-
-	fP <- 1 - 0.5 * (pH - 6)^2
-
-	P_base_supply <- fP * 0.35 * SOC + 0.5 * Polsen
-	i <- which(!is.na(Ptotal))
-	if (length(i) > 0) {
-		P_base_supply[i] <- fP[i] * 0.014 * Ptotal[i] + 0.5 * Polsen[i]
+		value <- value[parameters]
+		nms <- names(value)
+		
+		lapply(1:length(value), function(i) eval(parse(text = paste0("x$soil$", nms[i], " <- ", value[i]))))
+		return(x)
 	}
-	fK <- 0.625 * (3.4 - 0.4 * pH)
-	K_base_supply <- (fK * 400 * Kex) / (2 + 0.9 * SOC)
+)
 
-	return(cbind(N_base_supply=N_base_supply, P_base_supply=P_base_supply, K_base_supply=K_base_supply))
-}
+setMethod("crop<-", signature("Rcpp_QueftsModel", "list"), 
+	function(x, value) {
+		parameters <- c("KmaxStore", "KmaxVeg", "KminStore", "KminVeg", "Nfix", "NmaxStore", "NmaxVeg", "NminStore", "NminVeg", "PmaxStore", "PmaxVeg", "PminStore", "PminVeg", "Yzero")
+		nms <- names(value)
+		
+		if (!all(parameters %in% nms)) stop(paste("parameters missing:", paste(parameters[!(parameters %in% nms)], collapse=", ")))
+		value <- value[parameters]
+		nms <- names(value)
+		lapply(1:length(value), function(i) eval(parse(text = paste0("x$crop$", nms[i], " <- ", value[i]))))
+		return(x)
+	}
+)
+
+
+setMethod("fert<-", signature("Rcpp_QueftsModel", "list"), 
+	function(x, value) {
+		parameters <- c("N", "P", "K")
+		value <- value[parameters]
+		nms <- names(value)
+		lapply(1:length(value), function(i) eval(parse(text = paste0("x$", nms[i], " <- ", value[i]))))
+		return(x)
+	}
+)
+
+setMethod("biom<-", signature("Rcpp_QueftsModel", "list"), 
+	function(x, value) {
+		parameters <- c("leaf_att", "stem_att", "store_att", "SeasonLength")
+		nms <- names(value)
+		if (!all(parameters %in% nms)) stop(paste("parameters missing:", paste(parameters[!(parameters %in% nms)], collapse=", ")))
+		value <- value[parameters]
+		nms <- names(value)
+		lapply(1:length(value), function(i) eval(parse(text = paste0("x$", nms[i], " <- ", value[i]))))
+		return(x)
+	}
+)
+
 
 
 quefts_fert <- function() {
@@ -92,9 +70,9 @@ quefts_soil <- function() {
 }
 
 
-quefts_crop <- function(name='') {
+quefts_crop <- function(name="") {
 
-	if (name == '') {
+	if (name == "") {
 		d <- list(	
 			NminStore=0.0095, NminVeg=0.004,  NmaxStore=0.022,  NmaxVeg=0.0125, 
 			PminStore=0.0017, PminVeg=0.0004, PmaxStore=0.0075, PmaxVeg=0.003, 
@@ -106,14 +84,14 @@ quefts_crop <- function(name='') {
 		if (name %in% x$crop) {
 			d <- as.list(x[x$crop == name, ])
 		} else {
-			stop(name, " not found. Choose from: ", paste(d$crop, collapse=', '))
+			stop(name, " not found. Choose from: ", paste(d$crop, collapse=", "))
 		}
 	}	
 	return(d)
 }
 				
 
-setMethod ('show' , 'Rcpp_QueftsModel', 
+setMethod ("show" , "Rcpp_QueftsModel", 
 	function(object) {
 		utils::str(object)
 	}
@@ -134,9 +112,20 @@ quefts <- function(soil, crop, fert, biom) {
 }
 
 
-run <- function(x) {
-	x$run()
-}
+setMethod("run", signature("Rcpp_QueftsModel"), 
+	function(x, soil=NULL, yield=NULL, ...) {
+		if (is.null(soil) | is.null(yield)) {
+			x$run()
+		} else {
+			if (is.matrix(soil)) {
+				x$runbatch(soil[, "Ns"], soil[, "Ps"], soil[, "Ks"], yield[])		
+			} else {
+				x$runbatch(soil[["Ns"]][], soil[["Ps"]][], soil[["Ks"]][], yield[])		
+			}
+		}
+	}
+)
+
 
 
 setMethod("[", c("Rcpp_QueftsModel", "character", "missing"),
@@ -146,10 +135,10 @@ function(x, i, j, ... ,drop=TRUE) {
 
 setMethod("[", c("Rcpp_QueftsModel", "character", "character"),
 function(x, i, j, ... ,drop=TRUE) {
-	if (i=='model') {
+	if (i=="model") {
 		sapply(j, function(y) eval(parse(text = paste0("x$", y))))
 	} else {
-		j <- paste0(i, '$', j)
+		j <- paste0(i, "$", j)
 		sapply(j, function(y) eval(parse(text = paste0("x$", y))))
 	}
 })
@@ -189,7 +178,7 @@ setReplaceMethod("[", c("Rcpp_QueftsSoil", "character", "missing"),
 
 setReplaceMethod("[", c("Rcpp_QueftsModel", "character", "character"),
 	function(x, i, j, value) {
-		if (i=='model') {	
+		if (i=="model") {	
 			eval(parse(text = paste0("x$", j, " <- ", value)))
 		} else {
 			eval(parse(text = paste0("x$", i, "$", j, " <- ", value)))

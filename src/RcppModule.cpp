@@ -63,6 +63,8 @@ RCPP_MODULE(QUEFTS){
 //		.method("run", &QueftsModel::run, "run") 
 //		.method("output", &QueftsModel::output, "output") 
 		.method("run", &runout, "run the model")
+
+		.method("runbatch", &QueftsModel::runbatch, "run the model")
 		
 		.field("crop", &QueftsModel::crop, "crop")
 		.field("soil", &QueftsModel::soil, "soil")

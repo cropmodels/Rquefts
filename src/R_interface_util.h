@@ -2,7 +2,7 @@
 Author Robert Hijmans
 Date: May 2016
 
-License: GNU General Public License (GNU GPL) v. 2
+License: GPL (>=3)
 */
 
 #ifndef R_INTERFACE_UTIL_H_

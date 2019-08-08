@@ -1,6 +1,7 @@
 /* Author: Robert Hijmans
    Date: April 2016
-   License: GNU General Public License (GNU GPL) v. 2 
+   
+   License: GPL (>=3)
 */
 
 #ifndef SIMUTIL_H_

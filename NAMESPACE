@@ -1,4 +1,6 @@
 import(Rcpp)
+import(meteor)
 importFrom("methods", "new")
-useDynLib(Rquefts, .registration = TRUE)
+exportMethods("crop<-", "weather<-", "soil<-", "control<-", "biom<-", "fert<-", "run")
 exportPattern("^[[:alpha:]]+")
+useDynLib(Rquefts, .registration = TRUE)
