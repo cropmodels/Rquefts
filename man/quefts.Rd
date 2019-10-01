@@ -113,19 +113,17 @@ Sattari, Van Ittersum, Bouwman, Smit, and Janssen, 2014. Crop yield response to 
 
 \examples{
 
-library(Rquefts)
-
 # create a QUEFTS model
-# 1 get parameters
+# 1. get parameters
 soiltype <- quefts_soil()
 barley <- quefts_crop("Barley")
 fertilizer <- list(N=0, P=0, K=0)
 att_yield <- list(leaf_att=2200, stem_att=2700, store_att=4800, SeasonLength=110)
 
-# 2 create a model
+# 2. create a model
 q <- quefts(soiltype, barley, fertilizer, att_yield)
 
-# run the model
+# 3. run the model
 run(q)
 
 # change some parameters
@@ -140,47 +138,6 @@ q$K <- 50
 
 run(q)
 
-
-fert(q) <- list(N=0, P=0, K=0)
-N <- 1:20*10
-
-results <- matrix(nrow=length(N), ncol=12)
-colnames(results) <- names(run(q))
-for (i in 1:length(N)) {
-	q["N"] <- N[i]
-	results[i,] <- run(q)
-}
-
-yield <- results[,"store_lim"]
-
-par(mfrow=c(1,2))
-plot(N, yield, type="l", lwd=2)
-Efficiency = yield / N
-plot(N, Efficiency, type="l", lwd=2)
-
-f <- expand.grid(N=seq(0,400,10), P=seq(0,400,10), K=c(0,200))
-x <- rep(NA, nrow(f))
-for (i in 1:nrow(f)) {0
-	q$N <- f$N[i] 
-	q$P <- f$P[i] 
-	q$K <- f$K[i] 
-	x[i] <- run(q)["store_lim"]
-}
-x <- cbind(f, x)
-
-\dontrun{
-# display results
-library(raster  )
-r0 <- rasterFromXYZ(x[x$K==0, -3])
-r200 <- rasterFromXYZ(x[x$K==200, -3])
-
-par(mfrow=c(1,2))
-plot(r0, xlab="N fertilizer", ylab="P fertilizer", las=1, main="K=0")
-contour(r0, add=TRUE)
-plot(r200, xlab="N fertilizer", ylab="P fertilizer", las=1, main="K=200")
-contour(r200, add=TRUE)
-#plot(stack(r0, r200))
-}
 
 ## note that Rquefts uses C++ reference classes. 
 ## This means that if you copy a quefts model, you do not create a 

@@ -3,6 +3,9 @@ nutSupply <- function(pH, SOC, Kex, Polsen, Ptotal=NA) {
 	# SOC in g/kg, Kex in mmol/kg, P in mg/kg
 	# Janssen et al., 1990. Geoderma 46: 299-318, Table 2
 	# for recycling
+	#pH[pH < 3.5] <- 3.5
+	#pH[pH > 8.5] <- 8.5
+	
 	d <- cbind(as.vector(pH), as.vector(SOC), as.vector(Kex), as.vector(Polsen), as.vector(Ptotal))
 	#pH <- d[,1]
 	fN <- 0.25 * (d[,1] - 3)
@@ -19,6 +22,9 @@ nutSupply <- function(pH, SOC, Kex, Polsen, Ptotal=NA) {
 	fK <- 0.625 * (3.4 - 0.4 * d[,1])
 	#Kex <- d[,3]
 	K_base_supply <- (fK * 400 * d[,3]) / (2 + 0.9 * d[,2])
-	return(cbind(N_base_supply=N_base_supply, P_base_supply=P_base_supply, K_base_supply=K_base_supply))
+	x <- cbind(N_base_supply=N_base_supply, P_base_supply=P_base_supply, K_base_supply=K_base_supply)
+
+	x[x<0] <- 0
+	x
 }
 

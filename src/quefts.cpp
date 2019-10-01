@@ -1,50 +1,11 @@
 /* Calculate nutrient requirements and nutrient limited yields according to the QUEFTS model 
+See 
+Janssen, Guiking, Van der Eijk, Smaling, Wolf and Van Reuler, 1990. A system for the quantitative evaluation of tropical soils. Geoderma 46: 299-318
 
-Author: Robert Hijmans
-Date: April 2016
-License: GPL (>=3)
+Sattari, Van Ittersum, Bouwman, Smit, and Janssen, 2014. Crop yield response to soil fertility and N, P, K inputs in different environments: Testing and improving the QUEFTS model. Field Crops Research 157:35-46
 
-This C++ implementation is based on NUTRIE.FOR (part of WOFOST) by Joost Wolf, January 1987
-Copyright 1988, 2013 Alterra, Wageningen-UR and Licensed under the EUPL, Version 1.1
-
-INPUT
-Name    		Description                             Units 
--------------   --------------------------------------  ------
-Base soil supply of nutrients for standard crop with growth duration of 120 days
-N_base_supply	base soil supply of nitrogen      		kg ha-1
-P_base_supply	base soil supply of phosphorus    		kg ha-1
-K_base_supply   base soil supply of potassium     		kg ha-1
-
-Recovery fractions of applied fertilizer
-N_recovery		recovery fraction of applied nitrogen       -
-P_recovery		recovery fraction of applied phosphorus     -
-K_recovery     	recovery fraction of applied potassium      -
-
-Crop biomass (dry-matter) accumulated over growing season 
-in the absence of nutrient limitation (here referred to as "attainable")
-leaf_att		production of leaves					kg ha-1
-stem_att		production of stems                     kg ha-1
-store_att		production of storage organs            kg ha-1
-
-SeasonLength	duration of crop growth cycle       	days   
-
-
-OUTPUT
-Name    		Description       						Units
--------------	-----------------------------------		------
-(Actual soil supply of nutrients is function of crop growth duration)
-N_supply		actual soil supply of nitrogen    		kg ha-1
-P_supply		actual soil supply of phosphorus		kg ha-1
-K_supply  		actual soil supply of potassium 		kg ha-1
-
-Nfert    		required fertilizer nitrogen			kg ha-1
-Pfert    		required fertilizer phosphorus			kg ha-1
-Kfert			required fertilizer potassium			kg ha-1
-
-leaf_lim		nutrient-limited mass of leaves     	kg ha-1
-stem_lim		nutrient-limited mass of stems			kg ha-1
-store_lim		nutrient-limited mass of storage organs	kg ha-1
-
+Robert Hijmans
+April 2016
 */
 
 using namespace std;
@@ -101,7 +62,7 @@ std::vector<double> requirements(double minVeg, double maxVeg, double minStore, 
 // fertilizer requirements
 	double limVeg = (minVeg + maxVeg) / 2;
     double limStore = (maxStore + minStore) / 2;
-    double req = (limVeg * (leaf_att + stem_att) + limStore * store_att) * (1 - fix);
+    double req = fix ? 0 : (limVeg * (leaf_att + stem_att) + limStore * store_att);
     double reqFert = std::max(0.0, (req - supply) / recovery);
 
 // nutrient requirements at accumulated and diluted nutrient concentration
@@ -111,8 +72,6 @@ std::vector<double> requirements(double minVeg, double maxVeg, double minStore, 
 	std::vector<double> out = {reqAcc, reqDil, reqFert};
 	return(out);
 }
-
-
 
 
 void QueftsModel::run() {
@@ -128,7 +87,6 @@ void QueftsModel::run() {
 		Nzero = crop.Yzero * (1 - crop.Nfix) * (crop.NmaxVeg + 2 * crop.NminVeg) / 3;
 		Pzero = crop.Yzero * (crop.PmaxVeg + 2 * crop.PminVeg) / 3;
 		Kzero = crop.Yzero * (crop.KmaxVeg + 2 * crop.KminVeg) / 3;
-		
     } else if (stem_att <= 200)  {
         Yo = std::max(5.0, leaf_att);
         organs = 1;
