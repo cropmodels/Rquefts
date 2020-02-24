@@ -73,7 +73,7 @@ run(x, ...)
 \tabular{lll}{
 	\tab \bold{Input Parameters} \tab \bold{Explanation} \cr
 	\tab \bold{Soil} \tab . \cr
-	\tab \code{N_base_supply, P_base_supply, K_base_supply} \tab Potential supply (kg/ha) of N, P and K of the (unfertilized) soil in a growing season of standard length (default is 120 days). See \code{\link{nutSupply}} to estimate that. \cr
+	\tab \code{N_base_supply, P_base_supply, K_base_supply} \tab Potential supply (kg/ha) of N, P and K of the (unfertilized) soil in a growing season of standard length (default is 120 days). See \code{\link{nutSupply2}} to estimate that. \cr
 	\tab \code{N_recovery, P_recovery, K_recovery} \tab Fertilizer recovery, that is, the fraction of applied fertilizer that can be taken up by the plant. \cr
 	\tab \code{UptakeAdjust} \tab Two-column matrix to compute the fraction uptake from soil supply as function of length of season. The default standard season length is 120 days. The first column is the length of the growing season, the second column is the fraction uptake. Intermediate values are computed by linear interpolation. \cr
 	
@@ -105,9 +105,9 @@ vector with output variables as described in the Details
 }
 
 \references{
-Janssen, Guiking, Van der Eijk, Smaling, Wolf and Van Reuler, 1990. A system for the quantitative evaluation of tropical soils. Geoderma 46: 299-318
+Janssen B.H., F.C.T. Guiking, D. van der Eijk, E.M.A. Smaling, J. Wolf and H. van Reuler, 1990. A system for the quantitative evaluation of the fertility of tropical soils (QUEFTS). Geoderma 46: 299-318
 
-Sattari, Van Ittersum, Bouwman, Smit, and Janssen, 2014. Crop yield response to soil fertility and N, P, K inputs in different environments: Testing and improving the QUEFTS model. Field Crops Research 157:35-46
+Sattari, S.Z., M.K. van Ittersum, A.F. Bouwman, A.L. Smit, and B.H. Janssen, 2014. Crop yield response to soil fertility and N, P, K inputs in different environments: Testing and improving the QUEFTS model. Field Crops Research 157: 35-46
 }
 
 

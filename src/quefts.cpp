@@ -1,8 +1,7 @@
 /* Calculate nutrient requirements and nutrient limited yields according to the QUEFTS model 
-See 
-Janssen, Guiking, Van der Eijk, Smaling, Wolf and Van Reuler, 1990. A system for the quantitative evaluation of tropical soils. Geoderma 46: 299-318
-
-Sattari, Van Ittersum, Bouwman, Smit, and Janssen, 2014. Crop yield response to soil fertility and N, P, K inputs in different environments: Testing and improving the QUEFTS model. Field Crops Research 157:35-46
+After Janssen, B.H., Guiking, F.C.T., Van der Eijk, D., Smaling, E.M.A., Wolf, J., Van Reuler,
+H., 1990. A system for quantitative evaluation of the fertility of tropical soils
+(QUEFTS). Geoderma 46, 299–318.
 
 Robert Hijmans
 April 2016
@@ -195,8 +194,8 @@ std::vector<double> QueftsModel::runbatch(std::vector<double> Ns, std::vector<do
 		soil.P_base_supply = Ps[i];
 		soil.K_base_supply = Ks[i];
 		store_att = Ya[i];
-		leaf_att = 0.25 * store_att;
-		stem_att = leaf_att;
+		leaf_att = 0.45 * store_att;
+		stem_att = 0.55 * store_att;
 		run();
 		out[i] = store_lim;
 	}
