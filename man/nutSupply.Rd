@@ -43,7 +43,7 @@ Sattari, S.Z., M.K. van Ittersum, A.F. Bouwman, A.L. Smit, and B.H. Janssen, 201
 \examples{
 s1 <- nutSupply1(6, c(23, 11, 35), 15, c(1.6, 2.6, 2.4))
 s1
-s2 <- nutSupply2(20, 6, c(23, 11, 35), 15, c(1.6, 2.6, 2.4))
+s2 <- nutSupply2(20, 6, c(23, 11, 35), 15, c(1.6, 2.6, 2.4), 225)
 s2
 }
 

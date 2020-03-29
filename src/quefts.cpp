@@ -7,13 +7,9 @@ Robert Hijmans
 April 2016
 */
 
-using namespace std;
 #include <vector>
-#include <algorithm>
-#include <cmath>
 #include "SimUtil.h"
 #include "quefts.h"
-
 
 // QUEFTS functions
 double uptake(double Si, double iZero, double iYratA, double iYratD, double Sj, double jZero, double jYratA, double jYratD) {
@@ -189,7 +185,7 @@ std::vector<double> QueftsModel::runbatch(std::vector<double> Ns, std::vector<do
 	size_t n = Ns.size();
 	std::vector<double> out(n, NAN); 
 	for (size_t i=0; i<n; i++) {
-		if (isnan(Ns[i])) continue;	
+		if (std::isnan(Ns[i])) continue;	
 		soil.N_base_supply = Ns[i];
 		soil.P_base_supply = Ps[i];
 		soil.K_base_supply = Ks[i];
