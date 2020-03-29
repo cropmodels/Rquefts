@@ -7,13 +7,12 @@ Date: April 2016
 License: GPL (>=3)
 */
 
-#include <Rcpp.h>
-using namespace Rcpp;
-using namespace std;
 #include <vector>
+#include <Rcpp.h>
 #include "R_interface_util.h"
 #include "quefts.h"
 
+using namespace Rcpp;
 
 // [[Rcpp::export(name = ".quefts")]]
 NumericVector quefts(List soil, List crop, List fertilizer) {

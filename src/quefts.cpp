@@ -8,8 +8,11 @@ April 2016
 */
 
 #include <vector>
-#include "SimUtil.h"
+#include <algorithm>
+
+#include "qUtil.h"
 #include "quefts.h"
+
 
 // QUEFTS functions
 double uptake(double Si, double iZero, double iYratA, double iYratD, double Sj, double jZero, double jYratA, double jYratD) {

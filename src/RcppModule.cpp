@@ -29,7 +29,6 @@ RCPP_EXPOSED_CLASS(QueftsCrop)
 RCPP_EXPOSED_CLASS(QueftsSoil)
 	
 RCPP_MODULE(QUEFTS){
-    using namespace Rcpp;
 
     class_<QueftsSoil>("QueftsSoil")
 		.field("N_base_supply", &QueftsSoil::N_base_supply, "N_base_supply")
