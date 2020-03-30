@@ -1,6 +1,6 @@
 import(Rcpp)
 import(meteor)
 importFrom("methods", "new")
-exportMethods("crop<-", "weather<-", "soil<-", "control<-", "biom<-", "fert<-", "run")
-exportPattern("^[[:alpha:]]+")
+exportMethods("crop<-", "soil<-", "control<-", "biom<-", "fert<-", "run")
+export(nutSupply1, nutSupply2, fertilizers, nutrientRates, quefts_fert, quefts_biom, quefts_soil, quefts_crop, quefts)
 useDynLib(Rquefts, .registration = TRUE)

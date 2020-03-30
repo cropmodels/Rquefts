@@ -1,8 +1,8 @@
 Package: Rquefts
 Type: Package
 Title: Quantitative Evaluation of the Native Fertility of Tropical Soils
-Version: 1.0-7
-Date: 2020-03-12
+Version: 1.0-8
+Date: 2020-03-30
 LinkingTo: Rcpp
 SystemRequirements: C++11
 Imports: meteor, methods, Rcpp (>= 0.12.4)
