@@ -1,7 +1,7 @@
 # Rquefts
 This is a R package that implements the QUEFTS (Quantitative Evaluation of the Native Fertility of Tropical Soils) model
 
-You can install the current release of the package from CRAN with:
+You can install the *current release* of the package from CRAN with:
 
 ```
 install.packages("Rquefts")
