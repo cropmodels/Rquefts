@@ -9,6 +9,7 @@ April 2016
 
 #include <vector>
 #include <algorithm>
+#include <cmath> 
 
 #include "qUtil.h"
 #include "quefts.h"
@@ -182,7 +183,7 @@ void QueftsModel::run() {
 }
 
 
-
+// for spatial
 std::vector<double> QueftsModel::runbatch(std::vector<double> Ns, std::vector<double> Ps, std::vector<double> Ks, std::vector<double> Ya) {
 	
 	size_t n = Ns.size();

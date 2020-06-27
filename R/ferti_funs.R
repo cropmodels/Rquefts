@@ -12,3 +12,30 @@ nutrientRates <- function(supply, treatment) {
 	apply(NPK, 2, sum)
 }
 
+
+
+
+# minimize total cost of a fertilizer treatment
+# based on a function by Peter Pypers
+fertApp <- function(nutrients, fertilizers, price){
+	name <- fertilizers$name
+	supply <- t(as.matrix(fertilizers[,-1,drop=FALSE]))
+	treatment <- as.matrix(nutrients)
+
+	result <- matrix(nrow=ncol(supply), ncol=nrow(treatment))
+	stopifnot(length(price) == nrow(fertilizers))
+	treatment <- treatment * 100
+	for (i in 1:nrow(treatment)) {
+		solution <- limSolve::linp(E=supply, F=treatment[i,], Cost=price)
+		if (solution$IsError) {
+			result[,i] <- -99
+		} else { 	
+			result[,i] <- solution$X
+		}
+	}
+	colnames(result) <- paste0("f.", 1:ncol(result))
+	r <- data.frame(name, result)
+	#r[apply(r[,-1,drop=FALSE], 1, function(i) !all(i==0)), ]	
+	r
+}
+
