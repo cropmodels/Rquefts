@@ -5,10 +5,10 @@ function(object, supply, yatt, filename="", overwrite=FALSE, wopt=list(), ...)  
 
 	stopifnot(inherits(supply, "SpatRaster"))
 	stopifnot(inherits(yatt, "SpatRaster"))
-	stopifnot(nlyr(supply) == 3)
+	stopifnot(terra::nlyr(supply) == 3)
 	stopifnot(terra::nlyr(yatt) == 1)
 	nms <- toupper(substr(names(supply), 1, 1))
-	if (!all(nms1 == c("N", "P", "K"))) {
+	if (!all(nms == c("N", "P", "K"))) {
 		stop("the names of 'supply' must start with 'N', 'P', 'K'")
 	}
 	names(supply) <- c("Ns", "Ps", "Ks")

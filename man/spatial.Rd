@@ -43,13 +43,13 @@ soil <- r[[c("Tavg", "pH", "SOC", "Kex", "Pex", "Ptot")]]
 supply <- lapp(soil, nutSupply2)
 plot(supply)
 
-ya <- rast(system.file("sp/Ya.tif", package="Rquefts"))
+yatt <- rast(system.file("sp/Ya.tif", package="Rquefts"))
 
 maize <- quefts_crop("Maize")
 fertilizer <- list(N=0, P=0, K=0)
 q <- quefts(crop=maize, fert=fertilizer)
 
-p <- predict(q, supply, Ya)
+p <- predict(q, supply, yatt)
 plot(p)
 }
 
