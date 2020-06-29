@@ -17,7 +17,7 @@ nutrientRates <- function(supply, treatment) {
 
 # minimize total cost of a fertilizer treatment
 # based on a function by Pieter Pypers
-fertApp <- function(nutrients, fertilizers, price, exact=TRUE){
+fertApp <- function(nutrients, fertilizers, price, exact=TRUE, retCost=FALSE){
 	name <- fertilizers$name
 	supply <- t(as.matrix(fertilizers[,-1,drop=FALSE]))
 	treatment <- as.matrix(nutrients)
@@ -37,9 +37,14 @@ fertApp <- function(nutrients, fertilizers, price, exact=TRUE){
 			result[,i] <- solution$X
 		}
 	}
-	colnames(result) <- paste0("f.", 1:ncol(result))
-	r <- data.frame(name, result)
-	#r[apply(r[,-1,drop=FALSE], 1, function(i) !all(i==0)), ]	
+	
+	colnames(result) <- rownames(nutrients)
+	if (retCost) {
+			
+	} else {
+		r <- data.frame(name, result)
+		#r[apply(r[,-1,drop=FALSE], 1, function(i) !all(i==0)), ]	
+	}
 	r
 }
 

@@ -12,7 +12,7 @@ Compute the optimal fertilizer application rates given a target nutrient applica
 }
 
 \usage{
-fertApp(nutrients, fertilizers, price, exact)
+fertApp(nutrients, fertilizers, price, exact=TRUE, retCost=FALSE)
 }
 
 \arguments{
@@ -20,6 +20,8 @@ fertApp(nutrients, fertilizers, price, exact)
   \item{fertilizers}{data.frame with fertilizer products (see examples)}
   \item{price}{numeric. Vector with fertilizer product prices. Should have length of \code{nrow(fertilizers)} }
   \item{exact}{logical. If \code{FALSE} the cheapest solution is returned that includes at least as much of each nutrient as desired, but possibly more, if that is cheaper than the exact solution; or when there is no exact solution}
+  \item{retCost}{logical. If \code{FALSE} the optimal solution is returned (the amounts of fertilizers). If \code{TRUE}, the price of the optimal solution is returned}
+
 }
 
 
