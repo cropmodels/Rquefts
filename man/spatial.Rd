@@ -14,16 +14,18 @@ Make spatial predictions with a QUEFTS model. First create a model, then provide
 
 
 \usage{
-\S4method{predict}{Rcpp_QueftsModel}(object, data, filename="", overwrite=FALSE, wopt=list(), ...)
+\S4method{predict}{Rcpp_QueftsModel}(object, supply, yatt, filename="", overwrite=FALSE, wopt=list(), ...)
 }
 
 
 \arguments{
   \item{object}{QUEFTSModel}
-  \item{...}{SpatRaster objects with environmental data}  
+  \item{supply}{SpatRaster with nutrient supply data (Ns, Ps, Ks)}  
+  \item{yatt}{SpatRaster with attainable yield}  
   \item{filename}{character. Output filename. Optional}
   \item{overwrite}{logical. If \code{TRUE}, \code{filename} is overwritten}
-  \item{wopt}{list. Options for writing files as in \code{\link{writeRaster}}}
+  \item{wopt}{list. Options for writing files as in \code{\link[terra]{writeRaster}}}
+  \item{...}{addittional arguments. None implemented}  
 }
 
 
@@ -31,71 +33,23 @@ Make spatial predictions with a QUEFTS model. First create a model, then provide
 SpatRaster
 }
 
-
 \examples{
-
-## Predictors 
 library(terra)
-fta <- system.file("ex/ta.tif", package="QUEFTS")
-fpr <- system.file("ex/pr.tif", package="QUEFTS")
-fph <- system.file("ex/ph.tif", package="QUEFTS")
 
-# monthly average temperature
-ta <- rast(fta)
-# monthly precipitation
-pr <- rast(fpr)
-# pH
-ph <- rast(fph)
+ff <- list.files(system.file("sp", package="Rquefts"), full.names=TRUE)
+r <- rast(ff)
 
-# just for plotting
-preds <- c(mean(ta), sum(pr), ph)
-names(preds) <- c("tavg", "prec", "ph")
-plot(preds)
+soil <- r[[c("Tavg", "pH", "SOC", "Kex", "Pex", "Ptot")]]
+supply <- lapp(soil, nutSupply2)
+plot(supply)
 
+ya <- rast(system.file("sp/Ya.tif", package="Rquefts"))
 
-## make QUEFTS model
-crop <- QUEFTSPars("maize")
-m <- QUEFTS(crop)
-control(m, get_max=TRUE)
+maize <- quefts_crop("Maize")
+fertilizer <- list(N=0, P=0, K=0)
+q <- quefts(crop=maize, fert=fertilizer)
 
-# run the model, make sure to match 
-# the predictor and parameter names 
-mz <- predict(m, tavg=ta, prec=pr, ph=ph, wopt=list(names="maize"))
-plot(mz)
-
-# output by 15 day period
-control(m, get_max=FALSE)
-mz12 <- predict(m, tavg=ta, prec=pr, ph=ph)
-plot(mz12[[14:15]])
-
-control(m, lim_fact=TRUE)
-mzlim <- predict(m, tavg=ta, prec=pr+50, ph=ph)
-plot(mzlim[[14]])
-
-control(m, get_max=TRUE)
-# make the soil more acidic
-ph2 <- ph - 1.25 
-control(m, get_max=TRUE)
-mzph <- predict(m, tavg=ta, prec=pr, ph=ph2)
-plot(mzph)
-
-# more rainfall
-control(m, get_max=TRUE)
-pr2 <- pr + 30 # for each month
-mzpr <- predict(m, tavg=ta, prec=pr2, ph=ph)
-plot(mzpr)
-
-s <- c(mz, mzph, mzpr)
-names(s) <- c("base", "ph", "prec")
-plot(s)
-
-## another crop
-crop <- QUEFTSPars("pearl millet")
-m <- QUEFTS(crop)
-control(m, get_max=TRUE)
-pm <- predict(m, prec=pr, tavg=ta, wopt=list(names="Pearl millet"))
-
-crops <- c(mz, pm)
-plot(crops)
+p <- predict(q, supply, Ya)
+plot(p)
 }
 

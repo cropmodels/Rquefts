@@ -6,6 +6,7 @@ Date: 2020-06-27
 LinkingTo: Rcpp
 SystemRequirements: C++11
 Imports: meteor, methods, Rcpp (>= 0.12.4)
+Suggests: terra, limSolve
 Authors@R: c(
 	person("Robert J.", "Hijmans", role = c("cre", "aut"),  email = "r.hijmans@gmail.com"),
 	person("Pieter", "Pypers", role = "ctb"),
