@@ -12,16 +12,16 @@ Compute the optimal fertilizer application rates given a target nutrient applica
 }
 
 \usage{
-fertApp(nutrients, fertilizers, price)
+fertApp(nutrients, fertilizers, price, exact)
 }
 
 \arguments{
   \item{nutrients}{data.frame with columns "N", "P", "K" in kg (per unit area)}
   \item{fertilizers}{data.frame with fertilizer products (see examples)}
-  \item{price}{numeric. fertilizer product prices}
+  \item{price}{numeric. Vector with fertilizer product prices. Should have length of \code{nrow(fertilizers)} }
+  \item{exact}{logical. If \code{FALSE} the cheapest solution is returned that includes at least as much of each nutrient as desired, but possibly more, if that is cheaper than the exact solution; or when there is no exact solution}
 }
 
-\author{Pieter Pypers}
 
 \examples{
 # fertilizer product list
@@ -29,11 +29,8 @@ fert <- fertilizers()
 # shortening some of the names for display
 fert[,2] = substr(fert[,2], 1, 20)
 # contents are expressed as a percentage.
-ferts <- fert[c(8,15,16), 2:5] 
+ferts <- fert[c(8,15:17), 2:5] 
 ferts
-npk <- data.frame("NPK", 20, 20, 20)
-names(npk) <- names(ferts)
-ferts <- rbind(ferts, npk)
 
 x <- fertApp(data.frame(N=100, P=50, K=50), ferts, c(1, 1.5, 1.25, 1))
 # show that it is correct

@@ -20,9 +20,8 @@ function(object, supply, yatt, filename="", overwrite=FALSE, wopt=list(), ...)  
 	on.exit(terra::readStop(yatt))
 
 	out <- terra::rast(yatt)
-	names(out) <- "yield"
-	
 	nc <- ncol(yatt)
+	if (is.null(wopt$names)) wopt$names <- "yield"
 	b <- terra::writeStart(out, filename, overwrite, wopt)
 	for (i in 1:b$n) {
 		vs <- terra::readValues(supply, b$row[i], b$nrows[i], 1, nc, mat=TRUE)
