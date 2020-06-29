@@ -16,7 +16,7 @@ nutrientRates <- function(supply, treatment) {
 
 
 # minimize total cost of a fertilizer treatment
-# based on a function by Peter Pypers
+# based on a function by Pieter Pypers
 fertApp <- function(nutrients, fertilizers, price){
 	name <- fertilizers$name
 	supply <- t(as.matrix(fertilizers[,-1,drop=FALSE]))
