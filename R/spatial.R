@@ -4,9 +4,12 @@ setMethod("predict", signature("Rcpp_QueftsModel"),
 function(object, supply, yatt, filename="", overwrite=FALSE, wopt=list(), ...)  {
 
 	stopifnot(inherits(supply, "SpatRaster"))
-	stopifnot(inherits(yatt, "SpatRaster"))
 	stopifnot(terra::nlyr(supply) == 3)
+	stopifnot(terra::hasValues(supply))
+	stopifnot(inherits(yatt, "SpatRaster"))
 	stopifnot(terra::nlyr(yatt) == 1)
+	stopifnot(terra::hasValues(yatt))
+	
 	nms <- toupper(substr(names(supply), 1, 1))
 	if (!all(nms == c("N", "P", "K"))) {
 		stop("the names of 'supply' must start with 'N', 'P', 'K'")
@@ -15,12 +18,10 @@ function(object, supply, yatt, filename="", overwrite=FALSE, wopt=list(), ...)  
 	terra::compareGeom(supply, yatt, lyrs=FALSE, crs=TRUE, warncrs=TRUE, ext=TRUE, rowcol=TRUE, res=FALSE)
 
 	terra::readStart(supply)
-	on.exit(terra::readStop(supply))
 	terra::readStart(yatt)
-	on.exit(terra::readStop(yatt))
-
+	
 	out <- terra::rast(yatt)
-	nc <- ncol(yatt)
+	nc <- ncol(out)
 	if (is.null(wopt$names)) wopt$names <- "yield"
 	b <- terra::writeStart(out, filename, overwrite, wopt)
 	for (i in 1:b$n) {
@@ -29,6 +30,8 @@ function(object, supply, yatt, filename="", overwrite=FALSE, wopt=list(), ...)  
 		v <- run(object, vs, vy)
 		terra::writeValues(out, v, b$row[i], b$nrows[i])
 	}
+	terra::readStop(supply)
+	terra::readStop(yatt)
 	out <- terra::writeStop(out)
 	return(out)
 }
