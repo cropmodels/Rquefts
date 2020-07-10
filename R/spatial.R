@@ -1,8 +1,9 @@
 
 
 setMethod("predict", signature("Rcpp_QueftsModel"), 
-function(object, supply, yatt, filename="", overwrite=FALSE, wopt=list(), ...)  {
+function(object, supply, yatt, var="yield", filename="", overwrite=FALSE, wopt=list(), ...)  {
 
+	stopifnot(var %in% c("yield", "gap"))
 	stopifnot(inherits(supply, "SpatRaster"))
 	stopifnot(terra::nlyr(supply) == 3)
 	stopifnot(terra::hasValues(supply))
@@ -22,13 +23,24 @@ function(object, supply, yatt, filename="", overwrite=FALSE, wopt=list(), ...)  
 	
 	out <- terra::rast(yatt)
 	nc <- ncol(out)
-	if (is.null(wopt$names)) wopt$names <- "yield"
+	gap <- FALSE
+	if (var == "gap") {
+		gap <- TRUE
+		nlyr(out) <- 3
+		if (is.null(wopt$names)) wopt$names <- c("Ngap", "Pgap", "Kgap")
+	} else {
+		if (is.null(wopt$names)) wopt$names <- "yield"
+	}
 	b <- terra::writeStart(out, filename, overwrite, wopt)
 	for (i in 1:b$n) {
 		vs <- terra::readValues(supply, b$row[i], b$nrows[i], 1, nc, mat=TRUE)
 		vy <- terra::readValues(yatt, b$row[i], b$nrows[i], 1, nc)
-		v <- run(object, vs, vy)
+		v <- object$runbatch(vs[,1], vs[,2], vs[, 3], vy, var)	
+		if (gap) {
+			v <- as.vector(matrix(v, ncol=3, byrow=TRUE))
+		} 
 		terra::writeValues(out, v, b$row[i], b$nrows[i])
+		
 	}
 	terra::readStop(supply)
 	terra::readStop(yatt)

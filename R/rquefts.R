@@ -65,16 +65,8 @@ quefts <- function(soil, crop, fert, biom) {
 
 
 setMethod("run", signature("Rcpp_QueftsModel"), 
-	function(x, soil=NULL, yield=NULL, ...) {
-		if (is.null(soil) | is.null(yield)) {
-			x$run()
-		} else {
-			if (is.matrix(soil)) {
-				x$runbatch(soil[, "Ns"], soil[, "Ps"], soil[, "Ks"], yield[])		
-			} else {
-				x$runbatch(soil[["Ns"]][], soil[["Ps"]][], soil[["Ks"]][], yield[])		
-			}
-		}
+	function(x, ...) {
+		x$run()
 	}
 )
 

@@ -14,7 +14,7 @@ Make spatial predictions with a QUEFTS model. First create a model, then provide
 
 
 \usage{
-\S4method{predict}{Rcpp_QueftsModel}(object, supply, yatt, filename="", overwrite=FALSE, wopt=list(), ...)
+\S4method{predict}{Rcpp_QueftsModel}(object, supply, yatt, ar="yield", filename="", overwrite=FALSE, wopt=list(), ...)
 }
 
 
@@ -22,6 +22,7 @@ Make spatial predictions with a QUEFTS model. First create a model, then provide
   \item{object}{QUEFTSModel}
   \item{supply}{SpatRaster with nutrient supply data (Ns, Ps, Ks)}  
   \item{yatt}{SpatRaster with attainable yield}  
+  \item{var}{character. Output variable name. Either "yield" or "gap"}  
   \item{filename}{character. Output filename. Optional}
   \item{overwrite}{logical. If \code{TRUE}, \code{filename} is overwritten}
   \item{wopt}{list. Options for writing files as in \code{\link[terra]{writeRaster}}}
@@ -34,6 +35,8 @@ SpatRaster
 }
 
 \examples{
+
+library(Rquefts)
 library(terra)
 
 ff <- list.files(system.file("sp", package="Rquefts"), full.names=TRUE)
@@ -51,5 +54,9 @@ q <- quefts(crop=maize, fert=fertilizer)
 
 p <- predict(q, supply, yatt)
 plot(p)
+
+g <- predict(q, supply, yatt, "gap")
+plot(g)
+
 }
 

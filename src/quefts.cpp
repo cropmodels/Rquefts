@@ -10,6 +10,7 @@ April 2016
 #include <vector>
 #include <algorithm>
 #include <cmath> 
+#include <string> 
 
 #include "qUtil.h"
 #include "quefts.h"
@@ -184,10 +185,17 @@ void QueftsModel::run() {
 
 
 // for spatial
-std::vector<double> QueftsModel::runbatch(std::vector<double> Ns, std::vector<double> Ps, std::vector<double> Ks, std::vector<double> Ya) {
+std::vector<double> QueftsModel::runbatch(std::vector<double> Ns, std::vector<double> Ps, std::vector<double> Ks, std::vector<double> Ya, std::string var) {
+	
+	size_t nout = 1;
+	bool gap = false;
+	if (var == "gap") {
+		nout = 3;
+		gap = true;
+	}
 	
 	size_t n = Ns.size();
-	std::vector<double> out(n, NAN); 
+	std::vector<double> out(n * nout, NAN); 
 	for (size_t i=0; i<n; i++) {
 		if (std::isnan(Ns[i])) continue;	
 		soil.N_base_supply = Ns[i];
@@ -197,7 +205,13 @@ std::vector<double> QueftsModel::runbatch(std::vector<double> Ns, std::vector<do
 		leaf_att = 0.45 * store_att;
 		stem_att = 0.55 * store_att;
 		run();
-		out[i] = store_lim;
+		if (gap) {
+			out[i*3] = N_gap;
+			out[i*3+1] = P_gap;
+			out[i*3+2] = K_gap;
+		} else {
+			out[i] = store_lim;
+		}
 	}
 	return out;
 }	
