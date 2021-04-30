@@ -9,12 +9,12 @@ Spatial QUEFTS model predictions
 }
 
 \description{
-Make spatial predictions with a QUEFTS model. First create a model, then provide that to the predict methods, together with a SpatRaster object of soil properties as predictor.
+Make spatial predictions with a QUEFTS model. First create a model, then use the model with a SpatRaster of soil properties to make spatial predictons.
 }
 
 
 \usage{
-\S4method{predict}{Rcpp_QueftsModel}(object, supply, yatt, ar="yield", filename="", overwrite=FALSE, wopt=list(), ...)
+\S4method{predict}{Rcpp_QueftsModel}(object, supply, yatt, var="yield", filename="", overwrite=FALSE, ...)
 }
 
 
@@ -25,8 +25,7 @@ Make spatial predictions with a QUEFTS model. First create a model, then provide
   \item{var}{character. Output variable name. Either "yield" or "gap"}  
   \item{filename}{character. Output filename. Optional}
   \item{overwrite}{logical. If \code{TRUE}, \code{filename} is overwritten}
-  \item{wopt}{list. Options for writing files as in \code{\link[terra]{writeRaster}}}
-  \item{...}{addittional arguments. None implemented}  
+  \item{...}{list. Options for writing files as in \code{\link[terra]{writeRaster}}}
 }
 
 
@@ -57,6 +56,5 @@ plot(p)
 
 g <- predict(q, supply, yatt, "gap")
 plot(g)
-
 }
 
