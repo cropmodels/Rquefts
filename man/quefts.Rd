@@ -5,10 +5,6 @@
 \alias{run}
 \alias{run,Rcpp_QueftsModel-method}
 
-\alias{quefts_crop}
-\alias{quefts_soil}
-\alias{quefts_fert}
-\alias{quefts_biom}
 \alias{soil<-}
 \alias{crop<-}
 \alias{fert<-}
@@ -38,16 +34,13 @@ QUEFTS model
 \description{
 Create a QUEFTS model, set parameters, and run it to compute nutrient requirements and nutrient limited yield.
 
-A number of default crop parameter sets are provided, as well as one example soil. You need to provide attainable crop production (in this context that is the maximum production in the absence of nutrient limitation), or target dry-matter biomass for leaves, stems and the storage organ (e.g. grain, root or tuber). Some crops are grown for the stems/leaves, in which case there is no relevant storage organ (e.g. sugarcane, jute). production yield estimates can be obtained with a crop growth model. 
+A number of default crop parameter sets are available from \code{\link{quefts_crop}}, and an example soil from \code{\link{quefts_soil}}. You need to provide attainable or target crop production (in this context that is the maximum production in the absence of nutrient limitation), expressed as dry-matter biomass for leaves, stems and the storage organ (e.g. grain, root or tuber). See \code{\link{quefts_biom}}. Some crops are grown for the stems/leaves, in which case there is no relevant storage organ (e.g. sugarcane, jute). production yield estimates can be obtained with a crop growth model. 
 
-For a cereal crop you can assume that 50% of the total biomass is grain, and about 25% is stem and 25% is leave biomass.
 }
 
 \usage{
 quefts(soil, crop, fert, biom)
-quefts_soil()
 quefts_fert()
-quefts_crop(name="")
 quefts_biom()
 crop(x) <- value
 soil(x) <- value
@@ -61,7 +54,6 @@ run(x, ...)
  \item{crop}{list with named crop parameters. See Details. An example is returned by \code{quefts_crop()}} 
  \item{fert}{list with named fertilizer parameters (N, P and K). An example is returned by \code{quefts_fert()}} 
  \item{biom}{list with named biomass and growing season length parameters. An example is returned by \code{quefts_biom()}} 
- \item{name}{character. crop name} 
  \item{x}{QueftsModel object}
  \item{value}{list with soil, crop, fertilizer, or biomass parameters as above}
  \item{...}{additional arguments. None implemented}
@@ -70,22 +62,11 @@ run(x, ...)
 
 \details{
 
+For input parameters see \code{\link{quefts_crop}}, \code{\link{quefts_soil}}, \code{\link{quefts_fert}} and \code{\link{quefts_biom}}
+
 \tabular{lll}{
-	\tab \bold{Input Parameters} \tab \bold{Explanation} \cr
-	\tab \bold{Soil} \tab . \cr
-	\tab \code{N_base_supply, P_base_supply, K_base_supply} \tab Potential supply (kg/ha) of N, P and K of the (unfertilized) soil in a growing season of standard length (default is 120 days). See \code{\link{nutSupply2}} to estimate that. \cr
-	\tab \code{N_recovery, P_recovery, K_recovery} \tab Fertilizer recovery, that is, the fraction of applied fertilizer that can be taken up by the plant. \cr
-	\tab \code{UptakeAdjust} \tab Two-column matrix to compute the fraction uptake from soil supply as function of length of season. The default standard season length is 120 days. The first column is the length of the growing season, the second column is the fraction uptake. Intermediate values are computed by linear interpolation. \cr
-	
-	\tab \bold{Crop} \tab . \cr
-	\tab \code{_minVeg, _maxVeg, _minStore, _maxStore} \tab minimum and maximum concentration of "\code{_}" (N, P, or K) in vegetative organs and in storage organs (kg/kg) \cr
-	\tab \code{Yzero} \tab the maximum biomass of vegetative organs at zero yield of storage organs (kg/ha) \cr
-	\tab \code{Nfix} \tab the fraction of a crop's nitrogen uptake supplied by biological fixation \cr
 
-	\tab \bold{Management} \tab . \cr
-	\tab \code{N, P, K} \tab N, P, and K fertilizer applied. \cr
-
-	\tab \bold{Crop yield} \tab . \cr
+	\tab \bold{Crop yield (biom)} \tab . \cr
 	\tab \code{leaf_att, stem_att, store_att} \tab Attainable (in the absence of nutrient limitation), or target crop biomass (dry-matter, kg/ha) for leaves, stems and storage organs.\cr
 	\tab \code{SeasonLength} \tab Length of the growing season (days)\cr
 

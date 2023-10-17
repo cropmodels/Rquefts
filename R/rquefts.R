@@ -30,6 +30,8 @@ quefts_crop <- function(name="") {
 	} else {
 		f <- system.file("extdata/quefts_crop_pars.csv", package="Rquefts")
 		x <- utils::read.csv(f, stringsAsFactors=FALSE)
+		name <- tolower(name)
+		x$crop <- tolower(x$crop)
 		if (name %in% x$crop) {
 			d <- as.list(x[x$crop == name, ])
 		} else {
