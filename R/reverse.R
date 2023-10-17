@@ -11,12 +11,12 @@
 			qmod$P <- obs$P[i]
 			qmod$K <- obs$K[i]
 			run(qmod)["store_lim"] })
-    #calculate the total sum of squared errors (SSE) against the observed yields:
-    sum((Yq - obs$Y)**2)    
+    # sum of squared errors (SSE) (computed and observed yield)
+    sum((Yq - obs$Y)^2)    
 }
 
 
-revSupply <- function(obs, Ya, crop, soil, leaf_ratio, stem_ratio, SeasonLength = 120, ...){
+revSupply <- function(obs, crop, soil, Ya, leaf_ratio, stem_ratio, SeasonLength=120, ...){
   # minimise SSE to get soil NPK supply
 	obs <- obs[, c("N", "P", "K", "Y")]
 	init <- c(soil$N_base_supply, soil$P_base_supply, soil$K_base_supply)
@@ -24,6 +24,6 @@ revSupply <- function(obs, Ya, crop, soil, leaf_ratio, stem_ratio, SeasonLength 
               stem_att  = Ya * stem_ratio, 
               store_att = Ya, SeasonLength=SeasonLength)  
     qmod <- quefts(soil, crop, list(N=0,K=0,P=0), qYa)
-	stats::optim(init, .qmo, obs = obs, qmod=qmod, ...)$par
+	stats::optim(init, .qmo, obs=obs, qmod=qmod, ...)$par
 }
 

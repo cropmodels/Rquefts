@@ -12,7 +12,7 @@ Estimate the apparent base (unfertilized) soil supply of N, P and K based on nut
 }
 
 \usage{
-revSupply(obs, Ya, crop, soil, leaf_ratio, stem_ratio, SeasonLength = 120, ...)
+revSupply(obs, crop, soil, Ya, leaf_ratio, stem_ratio, SeasonLength = 120, ...)
 }
 
 \arguments{
