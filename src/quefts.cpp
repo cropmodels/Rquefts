@@ -185,7 +185,7 @@ void QueftsModel::run() {
 
 
 // for spatial
-std::vector<double> QueftsModel::predict(std::vector<double> Ns, std::vector<double> Ps, std::vector<double> Ks, std::vector<double> Ya, double leaf_frac, double stem_frac, std::vector<double> fert, std::string var) {
+std::vector<double> QueftsModel::predict(std::vector<double> Ns, std::vector<double> Ps, std::vector<double> Ks, std::vector<double> Ya, double leaf_frac, double stem_frac, std::string var) {
 	
 	size_t nout = 1;
 	bool gap = false;
@@ -193,14 +193,6 @@ std::vector<double> QueftsModel::predict(std::vector<double> Ns, std::vector<dou
 		nout = 3;
 		gap = true;
 	}
-	if (fert.size() != 3) {
-		std::vector<double> out(nout, -99);
-		return out;
-	}
-	
-	N_fertilizer = fert[0];
-	P_fertilizer = fert[1];
-	K_fertilizer = fert[2];
 	
 	size_t n = Ns.size();
 	std::vector<double> out(n * nout, NAN); 

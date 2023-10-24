@@ -47,6 +47,6 @@ Ya <- max(trial_data$Y) + 1000
 crop <- quefts_crop("Potato")
 soil <- quefts_soil()
 
-revSupply(trial_data, Ya, crop, soil, leaf_ratio=.17, stem_ratio=.14)
+revSupply(trial_data, crop, soil, Ya, leaf_ratio=.17, stem_ratio=.14)
 }
 

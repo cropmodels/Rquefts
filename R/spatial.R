@@ -1,7 +1,7 @@
 
 
 setMethod("predict", signature("Rcpp_QueftsModel"), 
-function(object, supply, yatt, leaf_frac, stem_frac, fert=c(0,0,0), var="yield", filename="", overwrite=FALSE, ...)  {
+function(object, supply, yatt, leaf_ratio, stem_ratio, var="yield", filename="", overwrite=FALSE, ...)  {
 
 	stopifnot(var %in% c("yield", "gap"))
 	stopifnot(inherits(supply, "SpatRaster"))
@@ -10,7 +10,6 @@ function(object, supply, yatt, leaf_frac, stem_frac, fert=c(0,0,0), var="yield",
 	stopifnot(inherits(yatt, "SpatRaster"))
 	stopifnot(terra::nlyr(yatt) == 1)
 	stopifnot(terra::hasValues(yatt))
-	stopifnot(length(fert) == 3)
 	nms <- toupper(substr(names(supply), 1, 1))
 	if (!all(nms == c("N", "P", "K"))) {
 		stop("the names of 'supply' must start with 'N', 'P', 'K'")
@@ -36,7 +35,7 @@ function(object, supply, yatt, leaf_frac, stem_frac, fert=c(0,0,0), var="yield",
 	for (i in 1:b$n) {
 		vs <- terra::readValues(supply, b$row[i], b$nrows[i], 1, nc, mat=TRUE)
 		vy <- terra::readValues(yatt, b$row[i], b$nrows[i], 1, nc)
-		v <- object$predict(vs[,1], vs[,2], vs[, 3], vy, leaf_frac, stem_frac, fert, var)	
+		v <- object$predict(vs[,1], vs[,2], vs[, 3], vy, leaf_ratio, stem_ratio, var)	
 		if (gap) {
 			v <- as.vector(matrix(v, ncol=3, byrow=TRUE))
 		} 
@@ -53,12 +52,12 @@ function(object, supply, yatt, leaf_frac, stem_frac, fert=c(0,0,0), var="yield",
 
 
 setMethod("batch", signature("Rcpp_QueftsModel"), 
-function(x, supply, fert, yatt, leaf_frac, stem_frac, var="yield")  {
+function(x, supply, fert, yatt, leaf_ratio, stem_ratio, var="yield")  {
 
 	stopifnot(var %in% c("yield", "gap"))
 	## recycling
 	d <- cbind(supply[,1], supply[,2], supply[,3], fert[,1], fert[,2], fert[,3], yatt)
-	v <- x$batch(d[,1], d[,2], d[, 3], d[,4], d[,5], d[, 6], d[, 7], leaf_frac, stem_frac, var)	
+	v <- x$batch(d[,1], d[,2], d[, 3], d[,4], d[,5], d[, 6], d[, 7], leaf_ratio, stem_ratio, var)	
 	if (var == "gap") {
 		v <- matrix(v, ncol=3, byrow=TRUE)
 		colnames(v) <- c("Ngap", "Pgap", "Kgap")

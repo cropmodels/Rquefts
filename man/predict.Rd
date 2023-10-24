@@ -14,7 +14,8 @@ Make spatial predictions with a QUEFTS model. First create a model, then use the
 
 
 \usage{
-\S4method{predict}{Rcpp_QueftsModel}(object, supply, fert=c(0,0,0), yatt, leaf_ratio, stem_ratio, var="yield", filename="", overwrite=FALSE, ...)
+\S4method{predict}{Rcpp_QueftsModel}(object, supply, yatt, leaf_ratio, stem_ratio, 
+		var="yield", filename="", overwrite=FALSE, ...)
 }
 
 
@@ -52,10 +53,10 @@ maize <- quefts_crop("Maize")
 fertilizer <- list(N=0, P=0, K=0)
 q <- quefts(crop=maize, fert=fertilizer)
 
-p <- predict(q, supply, yatt)
+p <- predict(q, supply, yatt, 0.46, 0.56)
 plot(p)
 
-g <- predict(q, supply, yatt, "gap")
+g <- predict(q, supply, yatt, 0.46, 0.56, "gap")
 plot(g)
 }
 
