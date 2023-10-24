@@ -23,7 +23,6 @@ NumericVector runout(QueftsModel* q) {
 	return(out);
 }
 
-
 RCPP_EXPOSED_CLASS(QueftsModel)
 RCPP_EXPOSED_CLASS(QueftsCrop)
 RCPP_EXPOSED_CLASS(QueftsSoil)
@@ -63,7 +62,8 @@ RCPP_MODULE(QUEFTS){
 //		.method("output", &QueftsModel::output, "output") 
 		.method("run", &runout, "run the model")
 
-		.method("runbatch", &QueftsModel::runbatch, "run the model")
+		.method("predict", &QueftsModel::predict)
+		.method("batch", &QueftsModel::batch)
 		
 		.field("crop", &QueftsModel::crop, "crop")
 		.field("soil", &QueftsModel::soil, "soil")

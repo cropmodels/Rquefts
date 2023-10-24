@@ -5,6 +5,7 @@ if (!isGeneric("biom<-")) { setGeneric("biom<-", function(x, value) standardGene
 if (!isGeneric("fert<-")) { setGeneric("fert<-", function(x, value) standardGeneric("fert<-")) }	
 
 if (!isGeneric("run")) { setGeneric("run", function(x, ...) standardGeneric("run")) }	
+if (!isGeneric("batch")) { setGeneric("batch", function(x, ...) standardGeneric("batch")) }	
 
 #if (!isGeneric("quefts")) { setGeneric("quefts", function(soil, crop, fert, biom) standardGeneric("quefts")) }	
 

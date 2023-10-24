@@ -185,7 +185,48 @@ void QueftsModel::run() {
 
 
 // for spatial
-std::vector<double> QueftsModel::runbatch(std::vector<double> Ns, std::vector<double> Ps, std::vector<double> Ks, std::vector<double> Ya, std::string var) {
+std::vector<double> QueftsModel::predict(std::vector<double> Ns, std::vector<double> Ps, std::vector<double> Ks, std::vector<double> Ya, double leaf_frac, double stem_frac, std::vector<double> fert, std::string var) {
+	
+	size_t nout = 1;
+	bool gap = false;
+	if (var == "gap") {
+		nout = 3;
+		gap = true;
+	}
+	if (fert.size() != 3) {
+		std::vector<double> out(nout, -99);
+		return out;
+	}
+	
+	N_fertilizer = fert[0];
+	P_fertilizer = fert[1];
+	K_fertilizer = fert[2];
+	
+	size_t n = Ns.size();
+	std::vector<double> out(n * nout, NAN); 
+	for (size_t i=0; i<n; i++) {
+		if (std::isnan(Ns[i])) continue;	
+		soil.N_base_supply = Ns[i];
+		soil.P_base_supply = Ps[i];
+		soil.K_base_supply = Ks[i];
+		store_att = Ya[i];
+		leaf_att = 0.45 * store_att;
+		stem_att = 0.55 * store_att;
+		run();
+		if (gap) {
+			out[i*3] = N_gap;
+			out[i*3+1] = P_gap;
+			out[i*3+2] = K_gap;
+		} else {
+			out[i] = store_lim;
+		}
+	}
+	return out;
+}	
+
+
+// for agwise
+std::vector<double> QueftsModel::batch(std::vector<double> Ns, std::vector<double> Ps, std::vector<double> Ks, std::vector<double> Nf, std::vector<double> Pf, std::vector<double> Kf, std::vector<double> Ya, double leaf_frac, double stem_frac, std::string var) {
 	
 	size_t nout = 1;
 	bool gap = false;
@@ -201,9 +242,12 @@ std::vector<double> QueftsModel::runbatch(std::vector<double> Ns, std::vector<do
 		soil.N_base_supply = Ns[i];
 		soil.P_base_supply = Ps[i];
 		soil.K_base_supply = Ks[i];
+		N_fertilizer = Nf[i];
+		P_fertilizer = Pf[i];
+		K_fertilizer = Kf[i];
 		store_att = Ya[i];
-		leaf_att = 0.45 * store_att;
-		stem_att = 0.55 * store_att;
+		leaf_att = leaf_frac * store_att;
+		stem_att = stem_frac * store_att;
 		run();
 		if (gap) {
 			out[i*3] = N_gap;

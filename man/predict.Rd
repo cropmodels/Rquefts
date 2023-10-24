@@ -9,12 +9,12 @@ Spatial QUEFTS model predictions
 }
 
 \description{
-Make spatial predictions with a QUEFTS model. First create a model, then use the model with a SpatRaster of soil properties to make spatial predictons.
+Make spatial predictions with a QUEFTS model. First create a model, then use the model with a SpatRaster of soil properties to make spatial predictions.
 }
 
 
 \usage{
-\S4method{predict}{Rcpp_QueftsModel}(object, supply, yatt, var="yield", filename="", overwrite=FALSE, ...)
+\S4method{predict}{Rcpp_QueftsModel}(object, supply, fert=c(0,0,0), yatt, leaf_ratio, stem_ratio, var="yield", filename="", overwrite=FALSE, ...)
 }
 
 
@@ -22,6 +22,8 @@ Make spatial predictions with a QUEFTS model. First create a model, then use the
   \item{object}{QUEFTSModel}
   \item{supply}{SpatRaster with nutrient supply data (Ns, Ps, Ks)}  
   \item{yatt}{SpatRaster with attainable yield}  
+  \item{leaf_ratio}{positive numeric (typically between 0 and 1) indicating the leaf weight relative to the storage organ weight. For example: 0.46 for maize, 0.17 for potato, and 0.18 for rice}  
+  \item{stem_ratio}{positive numeric (typically between 0 and 1) indicating the stem weight relative to the storage organ weight, For example: 0.56 for maize, 0.14 for potato, and 0.67 for rice}  
   \item{var}{character. Output variable name. Either "yield" or "gap"}  
   \item{filename}{character. Output filename. Optional}
   \item{overwrite}{logical. If \code{TRUE}, \code{filename} is overwritten}
@@ -35,7 +37,6 @@ SpatRaster
 
 \examples{
 
-library(Rquefts)
 library(terra)
 
 ff <- list.files(system.file("sp", package="Rquefts"), full.names=TRUE)

@@ -59,7 +59,8 @@ struct QueftsModel {
 		return std::vector<double> {N_gap, P_gap, K_gap, N_supply, P_supply, K_supply, leaf_lim, stem_lim, store_lim};
 	}
 
-	std::vector<double> runbatch(std::vector<double> Ns, std::vector<double> Ps, std::vector<double> Ks, std::vector<double> Ya, std::string var);
-		
+	std::vector<double> predict(std::vector<double> Ns, std::vector<double> Ps, std::vector<double> Ks, std::vector<double> Ya, double leaf_frac, double stem_frac, std::vector<double> fert, std::string var);
+
+	std::vector<double> batch(std::vector<double> Ns, std::vector<double> Ps, std::vector<double> Ks, std::vector<double> Nf, std::vector<double> Pf, std::vector<double> Kf, std::vector<double> Ya, double leaf_frac, double stem_frac, std::string var);
 };
 
