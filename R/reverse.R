@@ -2,7 +2,7 @@
 #REVERSE QUEFTS. 
 #Estimate the apparent soil nutrient supply based on a set of observed crop responses
 
-.qmo <- function(supply, obs, qmod){    
+.qmo <- function(supply, obs, qmod){ 
 	qmod$soil$N_base_supply <- supply[1]
 	qmod$soil$P_base_supply <- supply[2]
 	qmod$soil$K_base_supply <- supply[3]    
@@ -24,6 +24,6 @@ revSupply <- function(obs, crop, soil, Ya, leaf_ratio, stem_ratio, SeasonLength=
               stem_att  = Ya * stem_ratio, 
               store_att = Ya, SeasonLength=SeasonLength)  
     qmod <- quefts(soil, crop, list(N=0,K=0,P=0), qYa)
-	stats::optim(init, .qmo, obs=obs, qmod=qmod, ...)$par
+	stats::optim(init, .qmo, obs=obs, qmod=qmod, lower=rep(0, 3), method="L-BFGS-B", ...)$par
 }
 

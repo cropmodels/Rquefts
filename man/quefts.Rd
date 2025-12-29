@@ -40,8 +40,6 @@ A number of default crop parameter sets are available from \code{\link{quefts_cr
 
 \usage{
 quefts(soil, crop, fert, biom)
-quefts_fert()
-quefts_biom()
 crop(x) <- value
 soil(x) <- value
 fert(x) <- value
@@ -50,13 +48,13 @@ run(x, ...)
 }
 
 \arguments{
- \item{soil}{list with named soil parameters. See Details. An example is returned by \code{quefts_soil()}}
- \item{crop}{list with named crop parameters. See Details. An example is returned by \code{quefts_crop()}} 
- \item{fert}{list with named fertilizer parameters (N, P and K). An example is returned by \code{quefts_fert()}} 
- \item{biom}{list with named biomass and growing season length parameters. An example is returned by \code{quefts_biom()}} 
+ \item{soil}{list with named soil parameters. See Details. An example is returned by \code{\link{quefts_soil}}}
+ \item{crop}{list with named crop parameters. See Details. An example is returned by \code{\link{quefts_crop}}} 
+ \item{fert}{list with named fertilizer parameters (N, P and K). An example is returned by \code{\link{quefts_fert}}} 
+ \item{biom}{list with named biomass and growing season length parameters. An example is returned by \code{\link{quefts_biom}}} 
  \item{x}{QueftsModel object}
  \item{value}{list with soil, crop, fertilizer, or biomass parameters as above}
- \item{...}{additional arguments. None implemented}
+ \item{...}{Additional arguments. None implemented}
 }
 
 

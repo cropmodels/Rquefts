@@ -8,7 +8,7 @@ Optimal fertilizer application
 
 
 \description{
-Compute the optimal fertilizer application rates given a target nutrient application and the available products (fertilizer blends) and their prices. 
+Compute the optimal fertilizer application rates given a target nutrient application  of N, P, and K, and the available products (fertilizer blends) and their prices. 
 }
 
 \usage{
